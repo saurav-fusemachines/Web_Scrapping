@@ -46,7 +46,7 @@ def scrape_one_page(url, soup):
             job_qualification = list(job.find('div', {'data-testid': 'viewJobQualificationsContainer'})\
                                     .find('ul').strings)
             job_qualification = [x.strip() for x in job_qualification]
-            job_qualification = "\n".join(job_qualification)
+            # job_qualification = "\n".join(job_qualification)
         else:
             job_qualification = ""
 
@@ -98,5 +98,5 @@ while next_page != None:
     next_page = get_cursor(soup, i+1)
     
 print("Complete")
-df.to_csv('simply_hired.csv')
+df.to_csv('simply_hired.csv',index=False)
 df.head()
