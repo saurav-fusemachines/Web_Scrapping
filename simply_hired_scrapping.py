@@ -15,7 +15,7 @@ def get_cursor(soup, next_page_num):
         return cursor.get('href')
     else:
         return None
-    
+        
 
 def get_job_links(url, list_elems):
     job_links = []
