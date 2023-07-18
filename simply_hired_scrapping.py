@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import math
+from datetime import datetime,timedelta
 
 def scrape_page(url):
     # response = requests.get(url, params={"cursor": cursor})
@@ -57,6 +58,18 @@ def scrape_one_page(url, soup):
             # job_description = "\n".join(job_description)
         else:
             job_description = ""
+
+        job_posted_time = soup.find_all('span',{'data-testid':'viewJobBodyJobPostingTimestamp'})
+        job_posted_time = job_posted_time[0].find('span',{'data-testid':'detailText'}).text.strip()
+        date_format = "%Y-%m-%d %H:%M:%S.%f"
+        if "days" in  job_posted_time :
+            job_posted_date = datetime.now() - timedelta(days=int(job_posted_time.split()[0]))
+        elif "hours" in job_posted_time:
+            job_posted_date = datetime.now() - timedelta(hours=int(job_posted_time.split()[0]))
+        # job_posted_dates.append(job_posted_date.strftime(date_format))
+        job_posted_dates = job_posted_date.strftime(date_format)
+
+
         data = {
                 'job_title':job_title,
                 'company':company,
@@ -65,7 +78,8 @@ def scrape_one_page(url, soup):
                 'salary':salary, 
                 'posted_on':posted_on, 
                 'job_qualification':job_qualification, 
-                'job_description': job_description
+                'job_description': job_description,
+                'posted_on':job_posted_dates
                 }
         data_list.append(data)
         # break
