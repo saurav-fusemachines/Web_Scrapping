@@ -61,13 +61,18 @@ def scrape_one_page(url, soup):
 
         job_posted_time = soup.find_all('span',{'data-testid':'viewJobBodyJobPostingTimestamp'})
         job_posted_time = job_posted_time[0].find('span',{'data-testid':'detailText'}).text.strip()
-        date_format = "%Y-%m-%d %H:%M:%S.%f"
+        # date_format = "%Y-%m-%d %H:%M:%S.%f"
+        date_format = "%Y-%m-%d"
         if "days" in  job_posted_time :
             job_posted_date = datetime.now() - timedelta(days=int(job_posted_time.split()[0]))
+            job_posted_dates = job_posted_date.strftime(date_format)
         elif "hours" in job_posted_time:
             job_posted_date = datetime.now() - timedelta(hours=int(job_posted_time.split()[0]))
+            job_posted_dates = job_posted_date.strftime(date_format)
+        else:
+            job_posted_dates = datetime.now()
         # job_posted_dates.append(job_posted_date.strftime(date_format))
-        job_posted_dates = job_posted_date.strftime(date_format)
+        # job_posted_dates = job_posted_date.strftime(date_format)
 
 
         data = {
