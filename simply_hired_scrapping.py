@@ -81,10 +81,10 @@ def scrape_one_page(url, soup):
                 'location': location, 
                 'job_type': job_type, 
                 'salary':salary, 
-                'posted_on':posted_on, 
+                'posted_on':job_posted_dates,
                 'job_qualification':job_qualification, 
                 'job_description': job_description,
-                'posted_on':job_posted_dates
+
                 }
         data_list.append(data)
         # break
@@ -93,7 +93,7 @@ def scrape_one_page(url, soup):
 
 job = 'Data Engineer'
 location = 'texas'
-data_up_to = 7  #last seven days
+data_up_to = 1  #last seven days
 
 url = f'https://www.simplyhired.com/search?q={job}&l={location}&t={data_up_to}'
 next_page = url
@@ -115,7 +115,10 @@ while next_page != None:
 
     i = i+1
     next_page = get_cursor(soup, i+1)
-    
+    df['company'] = df['company'].str.replace(',','-')
+    df['location'] = df['location'].str.replace(',', '-')
+    df['salary'] = df['salary'].str.replace(',', '')
+    df['job_title'] = df['job_title'].str.replace(',',' ') 
 print("Complete")
-df.to_csv('simply_hired.csv',index=False)
-df.head()
+df.to_parquet('simply_hired_test101.parquet',index=False)
+# df.head()
